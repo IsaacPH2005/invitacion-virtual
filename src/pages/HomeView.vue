@@ -1,10 +1,21 @@
 <template>
     <main class="bautizo-app">
-        <!-- Fondo fijo compartido por toda la app -->
-        <!-- <div class="fondo-global"></div> -->
+        <!-- 🎵 Botón flotante de música -->
+        <div class="music-control" @click="toggleMusic">
+            <span class="music-icon">{{ isPlaying ? '🔊' : '🔇' }}</span>
+            <input
+                v-if="isPlaying"
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                v-model="volumen"
+                @input="cambiarVolumen"
+                @click.stop
+                class="volume-slider"
+            />
+        </div>
 
-        <!-- ① Invitación principal -->
-        <!-- HeroSection emite "ir-a-rsvp" al presionar "Confirmar Asistencia" -->
         <HeroSection
             nombreBebe="Keila Tamara Castro Luna"
             fecha="Sábado, 18 de Abril de 2026"
@@ -12,15 +23,13 @@
             hora="14:45 PM"
             nombrePadre="Wilfredo Castro Butrón"
             nombreMadre="Paola Nelly Luna Huallpa"
-            portadaUrl="./bautizo.webp"
+            portadaUrl="/bautizada/keyla3.png"
         />
 
         <div class="separador">
             <span></span><span class="sep-icono">🕊️ 🌸 🕊️</span><span></span>
         </div>
 
-        <!-- ② Iglesia y misa -->
-        <!-- BautizoCeremonia también emite "ir-a-rsvp" desde su botón Confirmar -->
         <BautizoCeremonia
             nombreIglesia="Iglesia Santa Ana de Cala Cala"
             diocesis="Cochabamba"
@@ -35,7 +44,6 @@
             <span></span><span class="sep-icono">🥂 🎉 🥂</span><span></span>
         </div>
 
-        <!-- ③ Local de recepción -->
         <BautizoLocal
             nombre-local="Salón Los Jardines"
             slogan="Donde los recuerdos florecen"
@@ -57,31 +65,80 @@
             <span></span><span class="sep-icono">💌 ✦ 💌</span><span></span>
         </div>
 
-        <!-- ④ Confirmación de asistencia -->
-        <!-- El id "rsvp-section" es el target del scroll desde HeroSection y BautizoCeremonia -->
         <div id="rsvp-section" ref="rsvpRef">
             <BautizoRSVP
-                fecha-limite="10 de Abril de 2025"
-                fecha-evento="2025-04-15"
-                whatsapp-papa="59171234567"
-                whatsapp-mama="59176543210"
+                fecha-limite="18 de Abril de 2026"
+                fecha-evento="2026-04-18"
+                whatsapp-papa="60767398"
+                whatsapp-mama="78330856"
             />
         </div>
     </main>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
+import { Howl } from 'howler';
 import HeroSection from '@/components/HeroSection.vue';
 import BautizoCeremonia from '@/components/BautizoCeremonia.vue';
 import BautizoLocal from '@/components/BautizoLocal.vue';
 import BautizoRSVP from '@/components/BautizoRSVP.vue';
 
-// Ref al contenedor del RSVP para scroll programático
+// ── Scroll RSVP ──────────────────────────────────────
 const rsvpRef = ref(null);
-
 function scrollARSVP() {
     rsvpRef.value?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── Música ───────────────────────────────────────────
+const isPlaying = ref(false);
+const volumen = ref(0.1);
+let sound = null;
+
+onMounted(() => {
+    sound = new Howl({
+        src: ['/music/videoplayback.m4a'],
+        loop: true,
+        volume: volumen.value,
+        autoplay: false,
+        onplay: () => {
+            isPlaying.value = true;
+        },
+        onpause: () => {
+            isPlaying.value = false;
+        },
+        onstop: () => {
+            isPlaying.value = false;
+        },
+    });
+
+    // Arranca al primer click en cualquier parte de la página
+    document.addEventListener('click', iniciarMusica, { once: true });
+});
+
+onUnmounted(() => {
+    sound?.unload();
+    document.removeEventListener('click', iniciarMusica);
+});
+
+function iniciarMusica() {
+    if (sound && !isPlaying.value) {
+        sound.play();
+    }
+}
+
+function toggleMusic() {
+    if (!sound) return;
+
+    if (isPlaying.value) {
+        sound.pause();
+    } else {
+        sound.play();
+    }
+}
+
+function cambiarVolumen() {
+    sound?.volume(parseFloat(volumen.value));
 }
 </script>
 
@@ -106,7 +163,38 @@ body {
     width: 100%;
 }
 
-/* Fondo fijo con los angelitos */
+/* 🎵 Botón flotante */
+.music-control {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(210, 150, 170, 0.4);
+    border-radius: 2rem;
+    padding: 0.5rem 0.9rem;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    transition: all 0.3s ease;
+    user-select: none;
+}
+.music-control:hover {
+    background: rgba(255, 255, 255, 0.97);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+}
+.music-icon {
+    font-size: 1.3rem;
+}
+.volume-slider {
+    width: 80px;
+    accent-color: #d296aa;
+    cursor: pointer;
+}
+
 .fondo-global {
     position: fixed;
     inset: 0;
@@ -117,7 +205,6 @@ body {
     z-index: 0;
 }
 
-/* Separador entre secciones */
 .separador {
     position: relative;
     z-index: 1;
@@ -129,14 +216,12 @@ body {
     max-width: 500px;
     margin: 0 auto;
 }
-
 .separador span:first-child,
 .separador span:last-child {
     flex: 1;
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(210, 150, 170, 0.55), transparent);
 }
-
 .sep-icono {
     font-size: 0.9rem;
     letter-spacing: 5px;

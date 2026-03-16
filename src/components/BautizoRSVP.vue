@@ -1,72 +1,62 @@
 <template>
     <section class="rsvp-section">
-        <!-- ════════════════════════════════════
-             PORTADA HERO
-        ════════════════════════════════════ -->
         <div class="portada-hero">
             <div class="portada-bg"></div>
             <div class="portada-overlay"></div>
-
             <div class="particulas" aria-hidden="true">
                 <span v-for="n in 12" :key="n" class="particula" :style="particulaStyle(n)">✦</span>
             </div>
-
             <div class="portada-content">
-                <!-- Sobre animado -->
                 <div class="portada-sobre-wrap" data-aos="zoom-in" data-aos-delay="100">
-                    <Mail :size="52" class="portada-sobre-svg" />
+                    <div class="sobre-anillo">
+                        <Mail :size="44" class="portada-sobre-svg" />
+                    </div>
                     <div class="sobre-glow"></div>
                 </div>
-
-                <p class="portada-eyebrow" data-aos="fade-down" data-aos-delay="220">
-                    ✦ Bautizo de Keila Tamara ✦
-                </p>
-                <h1 class="portada-titulo" data-aos="zoom-in-up" data-aos-delay="340">
+                <div class="eyebrow-wrap" data-aos="fade-down" data-aos-delay="200">
+                    <span class="eyebrow-line"></span>
+                    <p class="portada-eyebrow">Bautizo de Keila Tamara</p>
+                    <span class="eyebrow-line"></span>
+                </div>
+                <h1 class="portada-titulo" data-aos="zoom-in-up" data-aos-delay="320">
                     Confirma tu<br />Asistencia
                 </h1>
-                <p class="portada-sub" data-aos="fade-up" data-aos-delay="460">
+                <p class="portada-sub" data-aos="fade-up" data-aos-delay="440">
                     Tu presencia es nuestro mejor regalo
                 </p>
-
-                <!-- Countdown -->
                 <div
                     class="portada-countdown"
                     v-if="diasRestantes >= 0"
                     data-aos="fade-up"
-                    data-aos-delay="580"
+                    data-aos-delay="560"
                 >
-                    <div class="cd-bloque">
+                    <div class="cd-bloque-num">
                         <span class="cd-num">{{ diasRestantes }}</span>
                         <span class="cd-label">días</span>
                     </div>
-                    <div class="cd-div">·</div>
-                    <div class="cd-bloque">
-                        <span class="cd-texto">{{ fechaLimite }}</span>
-                        <span class="cd-label">fecha límite</span>
+                    <div class="cd-sep"></div>
+                    <div class="cd-bloque-texto">
+                        <span class="cd-sublabel">Confirma antes del</span>
+                        <span class="cd-fecha">{{ fechaLimite }}</span>
                     </div>
                 </div>
-
                 <button
                     class="portada-cta"
                     @click="scrollAbajo"
                     data-aos="fade-up"
-                    data-aos-delay="700"
+                    data-aos-delay="680"
                 >
                     <span>Ir al formulario</span>
                     <ChevronDown :size="18" class="cta-arrow-svg" />
                 </button>
             </div>
-
-            <div class="scroll-mouse">
-                <div class="scroll-dot"></div>
+            <div class="scroll-indicator" @click="scrollAbajo">
+                <div class="scroll-track"><div class="scroll-dot"></div></div>
+                <span class="scroll-label">Desliza</span>
             </div>
         </div>
 
-        <!-- ════════════════════════════════════
-             CUERPO
-        ════════════════════════════════════ -->
         <div ref="cuerpoRef" class="rsvp-body">
-            <!-- Encabezado -->
             <div class="seccion-header" data-aos="fade-up">
                 <div class="ornamento">
                     <Sparkles :size="14" class="orn-icon" />
@@ -75,20 +65,12 @@
                 </div>
                 <h2 class="seccion-titulo">Confirmar Asistencia</h2>
                 <p class="seccion-sub">Tu presencia es nuestro mejor regalo</p>
-                <div class="linea-deco">
-                    <span class="linea-trazo"></span>
-                    <span class="linea-flor">🌸</span>
-                    <span class="linea-trazo"></span>
-                </div>
             </div>
 
-            <!-- ══ FORMULARIO ══ -->
-            <div class="rsvp-card" v-if="!enviado" data-aos="fade-up" data-aos-delay="100">
-                <!-- Banner fecha límite -->
+            <!-- FORMULARIO -->
+            <div class="rsvp-card" v-if="!enviado" data-aos="fade-up" data-aos-delay="80">
                 <div class="fecha-banner">
-                    <div class="fb-icon-wrap">
-                        <Timer :size="20" class="fb-svg" />
-                    </div>
+                    <div class="fb-icon-wrap"><Timer :size="19" class="fb-svg" /></div>
                     <div class="fb-texto">
                         <p class="fb-label">Confirma antes del</p>
                         <p class="fb-fecha">{{ fechaLimite }}</p>
@@ -99,55 +81,76 @@
                     </div>
                 </div>
 
-                <!-- PASO 1 ─ Tus datos -->
-                <div class="form-bloque" data-aos="fade-up" data-aos-delay="120">
+                <!-- PASO 1 -->
+                <div class="form-bloque" data-aos="fade-up" data-aos-delay="100">
                     <div class="bloque-titulo">
-                        <div class="bt-numero">1</div>
-                        <div class="bt-icon-wrap">
-                            <UserRound :size="15" class="bt-svg" />
-                        </div>
+                        <div class="bt-numero"><span>1</span></div>
+                        <div class="bt-icon-wrap"><UserRound :size="14" class="bt-svg" /></div>
                         <h4>Tus Datos</h4>
                     </div>
-
                     <div class="campo-grid">
                         <div class="campo">
                             <label>Nombre completo <span class="req">*</span></label>
                             <div class="input-wrap" :class="{ 'has-error': errores.nombre }">
                                 <div class="input-prefix-wrap">
-                                    <Pencil :size="15" class="input-prefix-svg" />
+                                    <Pencil :size="14" class="input-prefix-svg" />
                                 </div>
                                 <input
                                     v-model="form.nombre"
                                     type="text"
                                     placeholder="Ej: María García"
+                                    autocomplete="name"
                                     @input="errores.nombre = false"
                                 />
                             </div>
                             <p class="campo-error" v-if="errores.nombre">
-                                Por favor ingresa tu nombre
+                                <AlertCircle :size="11" class="err-icon" /> Por favor ingresa tu
+                                nombre
                             </p>
                         </div>
-
                         <div class="campo">
-                            <label>Teléfono / WhatsApp <span class="req">*</span></label>
-                            <div class="input-wrap" :class="{ 'has-error': errores.telefono }">
-                                <div class="input-prefix-wrap">
-                                    <Phone :size="15" class="input-prefix-svg" />
+                            <label
+                                ><Phone :size="12" class="label-icon" /> WhatsApp
+                                <span class="req">*</span></label
+                            >
+                            <div
+                                class="input-wrap tel-wrap"
+                                :class="{ 'has-error': errores.telefono }"
+                            >
+                                <div class="tel-prefix">
+                                    <span class="tel-flag">🇧🇴</span>
+                                    <span class="tel-code">+591</span>
                                 </div>
                                 <input
                                     v-model="form.telefono"
                                     type="tel"
-                                    placeholder="+591 7XXXXXXX"
-                                    @input="errores.telefono = false"
+                                    inputmode="numeric"
+                                    placeholder="7XXXXXXX"
+                                    maxlength="8"
+                                    autocomplete="tel-national"
+                                    @input="onTelefonoInput"
                                 />
+                                <div class="tel-check" v-if="telefonoValido">
+                                    <CheckCircle2 :size="16" class="tel-check-svg" />
+                                </div>
                             </div>
+                            <p
+                                class="campo-hint"
+                                v-if="
+                                    !errores.telefono && !telefonoValido && form.telefono.length > 0
+                                "
+                            >
+                                <Info :size="11" class="hint-icon" /> 8 dígitos (ej: 70123456)
+                            </p>
+                            <p class="campo-hint valido" v-if="telefonoValido">
+                                <CheckCircle2 :size="11" class="hint-icon" /> Número válido ✓
+                            </p>
                             <p class="campo-error" v-if="errores.telefono">
-                                Por favor ingresa tu teléfono
+                                <AlertCircle :size="11" class="err-icon" /> Ingresa 8 dígitos
+                                válidos (7X o 6X)
                             </p>
                         </div>
                     </div>
-
-                    <!-- Toggle asistencia -->
                     <div class="asiste-bloque">
                         <label class="asiste-label"
                             >¿Podrás asistir? <span class="req">*</span></label
@@ -161,10 +164,10 @@
                                     errores.asiste = false;
                                 "
                             >
-                                <PartyPopper :size="18" class="ab-svg" />
+                                <PartyPopper :size="20" class="ab-svg" />
                                 <span class="ab-texto">¡Sí asistiré!</span>
                                 <div class="ab-check" v-if="form.asiste === true">
-                                    <Check :size="13" />
+                                    <Check :size="12" />
                                 </div>
                             </button>
                             <button
@@ -176,36 +179,33 @@
                                     form.ninos = 0;
                                 "
                             >
-                                <HeartCrack :size="18" class="ab-svg" />
+                                <HeartCrack :size="20" class="ab-svg" />
                                 <span class="ab-texto">No podré ir</span>
                                 <div class="ab-check no-check" v-if="form.asiste === false">
-                                    <Check :size="13" />
+                                    <Check :size="12" />
                                 </div>
                             </button>
                         </div>
                         <p class="campo-error" v-if="errores.asiste">
-                            Por favor indica si asistirás
+                            <AlertCircle :size="11" class="err-icon" /> Por favor indica si
+                            asistirás
                         </p>
                     </div>
                 </div>
 
-                <!-- PASO 2 ─ ¿Cuántos? -->
+                <!-- PASO 2 -->
                 <transition name="expand">
-                    <div class="form-bloque" v-if="form.asiste === true" data-aos="fade-up">
+                    <div class="form-bloque" v-if="form.asiste === true">
                         <div class="bloque-titulo">
-                            <div class="bt-numero">2</div>
-                            <div class="bt-icon-wrap">
-                                <Users :size="15" class="bt-svg" />
-                            </div>
+                            <div class="bt-numero"><span>2</span></div>
+                            <div class="bt-icon-wrap"><Users :size="14" class="bt-svg" /></div>
                             <h4>¿Cuántos asistirán?</h4>
                         </div>
-
                         <div class="contadores-grid">
-                            <!-- Adultos -->
                             <div class="contador-card adultos">
                                 <div class="cnt-top">
                                     <div class="cnt-icon-wrap adultos-icon">
-                                        <UserRound :size="20" class="cnt-svg" />
+                                        <UserRound :size="19" class="cnt-svg" />
                                     </div>
                                     <div>
                                         <p class="cnt-titulo">Adultos</p>
@@ -235,12 +235,10 @@
                                     </button>
                                 </div>
                             </div>
-
-                            <!-- Niños -->
                             <div class="contador-card ninos">
                                 <div class="cnt-top">
                                     <div class="cnt-icon-wrap ninos-icon">
-                                        <Baby :size="20" class="cnt-svg" />
+                                        <Baby :size="19" class="cnt-svg" />
                                     </div>
                                     <div>
                                         <p class="cnt-titulo">Niños</p>
@@ -271,91 +269,36 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Resumen total -->
                         <div class="resumen-total">
                             <div class="rt-pill adultos-pill">
-                                <UserRound :size="14" class="rt-svg" />
-                                <span class="rt-label">Adultos</span>
-                                <span class="rt-num">{{ form.adultos }}</span>
+                                <UserRound :size="13" class="rt-svg" /><span class="rt-label"
+                                    >Adultos</span
+                                ><span class="rt-num">{{ form.adultos }}</span>
                             </div>
                             <span class="rt-op">+</span>
                             <div class="rt-pill ninos-pill">
-                                <Baby :size="14" class="rt-svg" />
-                                <span class="rt-label">Niños</span>
-                                <span class="rt-num">{{ form.ninos }}</span>
+                                <Baby :size="13" class="rt-svg" /><span class="rt-label">Niños</span
+                                ><span class="rt-num">{{ form.ninos }}</span>
                             </div>
                             <span class="rt-op">=</span>
                             <div class="rt-pill total-pill">
-                                <PartyPopper :size="14" class="rt-svg" />
-                                <span class="rt-label">Total</span>
-                                <span class="rt-num grande">{{ form.adultos + form.ninos }}</span>
-                            </div>
-                        </div>
-
-                        <!-- Restricciones alimentarias -->
-                        <div class="campo full">
-                            <label>
-                                <UtensilsCrossed
-                                    :size="13"
-                                    style="display: inline; margin-right: 5px; color: var(--dorado)"
-                                />
-                                ¿Alguna restricción alimentaria o alergia?
-                            </label>
-                            <div class="chips-wrap">
-                                <button
-                                    v-for="a in opcionesAlergias"
-                                    :key="a"
-                                    class="chip"
-                                    :class="{ activo: form.alergias.includes(a) }"
-                                    @click="toggleAlergia(a)"
-                                >
-                                    <Check
-                                        :size="11"
-                                        class="chip-check-svg"
-                                        v-if="form.alergias.includes(a)"
-                                    />
-                                    {{ a }}
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Transporte -->
-                        <div class="campo full">
-                            <label>
-                                <Car
-                                    :size="13"
-                                    style="display: inline; margin-right: 5px; color: var(--dorado)"
-                                />
-                                ¿Necesitas transporte al evento?
-                            </label>
-                            <div class="asiste-opciones compact">
-                                <button
-                                    class="asiste-btn si small"
-                                    :class="{ activo: form.transporte === true }"
-                                    @click="form.transporte = true"
-                                >
-                                    <Car :size="15" class="ab-svg" /> Sí necesito
-                                </button>
-                                <button
-                                    class="asiste-btn no small"
-                                    :class="{ activo: form.transporte === false }"
-                                    @click="form.transporte = false"
-                                >
-                                    <X :size="15" class="ab-svg" /> No necesito
-                                </button>
+                                <PartyPopper :size="13" class="rt-svg" /><span class="rt-label"
+                                    >Total</span
+                                ><span class="rt-num grande">{{ form.adultos + form.ninos }}</span>
                             </div>
                         </div>
                     </div>
                 </transition>
 
-                <!-- PASO 3 ─ Mensaje -->
+                <!-- PASO 3 -->
                 <transition name="expand">
                     <div class="form-bloque" v-if="form.asiste !== null">
                         <div class="bloque-titulo">
-                            <div class="bt-numero">{{ form.asiste ? '3' : '2' }}</div>
+                            <div class="bt-numero">
+                                <span>{{ form.asiste ? '3' : '2' }}</span>
+                            </div>
                             <div class="bt-icon-wrap">
-                                <MessageCircle :size="15" class="bt-svg" />
+                                <MessageCircle :size="14" class="bt-svg" />
                             </div>
                             <h4>
                                 {{
@@ -384,7 +327,7 @@
                 <transition name="expand">
                     <div class="form-acciones" v-if="form.asiste !== null">
                         <div class="pre-envio" v-if="form.asiste && form.adultos + form.ninos > 0">
-                            <ClipboardList :size="17" class="pe-svg" />
+                            <ClipboardList :size="16" class="pe-svg" />
                             <span class="pe-texto">
                                 Confirmando
                                 <strong
@@ -396,7 +339,10 @@
                                 {{ form.ninos }} niño{{ form.ninos !== 1 ? 's' : '' }})
                             </span>
                         </div>
-
+                        <div class="wa-destino-aviso">
+                            <MessageCircle :size="14" class="wa-aviso-icon" />
+                            <span>Se enviará por WhatsApp a papá 👨 y mamá 👩</span>
+                        </div>
                         <button
                             class="btn-enviar"
                             :class="{ cargando: enviando }"
@@ -412,37 +358,31 @@
                             </template>
                             <template v-else>
                                 <LoaderCircle :size="18" class="be-spinner-svg" />
-                                <span>Enviando...</span>
+                                <span>Abriendo WhatsApp...</span>
                             </template>
                         </button>
-
                         <p class="form-nota">
-                            <Lock
-                                :size="11"
-                                style="display: inline; margin-right: 4px; opacity: 0.6"
-                            />
-                            Tu información solo será usada para organizar el evento
+                            <Lock :size="11" class="lock-icon" /> Tu información solo será usada
+                            para organizar el evento
                         </p>
                     </div>
                 </transition>
             </div>
 
-            <!-- ══ PANTALLA ÉXITO ══ -->
-            <div class="exito-card" v-else>
+            <!-- ÉXITO -->
+            <div class="exito-card" v-else data-aos="zoom-in">
                 <div class="exito-sparkles" aria-hidden="true">
                     <span v-for="n in 10" :key="n" class="sparkle" :style="sparkleStyle(n)">✦</span>
                 </div>
-
                 <div class="exito-icono-wrap">
                     <component
                         :is="form.asiste ? PartyPopper : HeartHandshake"
-                        :size="64"
+                        :size="58"
                         class="exito-icono-svg"
                     />
                     <div class="exito-ring r1"></div>
                     <div class="exito-ring r2"></div>
                 </div>
-
                 <h3 class="exito-titulo">
                     {{ form.asiste ? '¡Gracias por confirmar!' : '¡Gracias por avisarnos!' }}
                 </h3>
@@ -453,61 +393,59 @@
                             : `Lamentamos que no puedas venir, ${form.nombre.split(' ')[0]} 💔`
                     }}
                 </p>
-
-                <!-- Resumen tarjetas -->
                 <div class="exito-resumen" v-if="form.asiste">
                     <div class="er-card adultos-card">
-                        <UserRound :size="28" class="er-svg adultos-svg" />
+                        <UserRound :size="26" class="er-svg adultos-svg" />
                         <p class="er-label">Adultos</p>
                         <p class="er-num">{{ form.adultos }}</p>
                     </div>
                     <div class="er-card ninos-card">
-                        <Baby :size="28" class="er-svg ninos-svg" />
+                        <Baby :size="26" class="er-svg ninos-svg" />
                         <p class="er-label">Niños</p>
                         <p class="er-num">{{ form.ninos }}</p>
                     </div>
                     <div class="er-card total-card">
-                        <PartyPopper :size="28" class="er-svg total-svg" />
+                        <PartyPopper :size="26" class="er-svg total-svg" />
                         <p class="er-label">Total</p>
                         <p class="er-num grande">{{ form.adultos + form.ninos }}</p>
                     </div>
                 </div>
-
-                <!-- Detalles evento -->
                 <div class="exito-detalles" v-if="form.asiste">
                     <div class="ed-item">
-                        <CalendarDays :size="15" class="ed-svg" />
-                        <span>Sábado, 15 de Abril de 2025</span>
+                        <CalendarDays :size="15" class="ed-svg" /><span
+                            >Sábado, 18 de Abril de 2026</span
+                        >
                     </div>
                     <div class="ed-item">
-                        <Church :size="15" class="ed-svg" />
-                        <span>Iglesia Santa Ana de Cala Cala · 2:45 PM</span>
+                        <Church :size="15" class="ed-svg" /><span
+                            >Iglesia Santa Ana de Cala Cala · 2:45 PM</span
+                        >
                     </div>
                     <div class="ed-item">
-                        <GlassWater :size="15" class="ed-svg" />
-                        <span>Recepción en el Salón · ~3:30 PM</span>
-                    </div>
-                    <div class="ed-item" v-if="form.transporte">
-                        <Car :size="15" class="ed-svg" />
-                        <span>Transporte solicitado ✓</span>
-                    </div>
-                    <div class="ed-item" v-if="form.alergias.length">
-                        <UtensilsCrossed :size="15" class="ed-svg" />
-                        <span>Alergias: {{ form.alergias.join(', ') }}</span>
+                        <GlassWater :size="15" class="ed-svg" /><span
+                            >Recepción en el Salón · ~3:30 PM</span
+                        >
                     </div>
                 </div>
-
+                <div class="exito-tel-confirmado">
+                    <Phone :size="13" class="exito-tel-icon" />
+                    <span
+                        >WhatsApp: <strong>+591 {{ form.telefono }}</strong></span
+                    >
+                </div>
+                <div class="exito-wa-aviso">
+                    <MessageCircle :size="15" class="exito-wa-icon" />
+                    <span>Respuesta enviada a papá 👨 y mamá 👩 por WhatsApp 🎉</span>
+                </div>
                 <button class="btn-modificar" @click="modificarRespuesta">
-                    <Pencil :size="13" style="margin-right: 6px" />
-                    Modificar mi respuesta
+                    <Pencil :size="13" style="margin-right: 6px" /> Modificar mi respuesta
                 </button>
             </div>
 
-            <!-- PIE -->
             <div class="rsvp-pie" data-aos="fade-up">
                 <div class="pie-linea">
                     <span class="pl-trazo"></span>
-                    <Flower2 :size="16" class="pie-flor-svg" />
+                    <Flower2 :size="15" class="pie-flor-svg" />
                     <span class="pl-trazo"></span>
                 </div>
                 <p class="pie-cita">"El amor en familia es la vida misma"</p>
@@ -534,9 +472,6 @@ import {
     Baby,
     Minus,
     Plus,
-    UtensilsCrossed,
-    Car,
-    X,
     MessageCircle,
     ClipboardList,
     ArrowRight,
@@ -547,13 +482,17 @@ import {
     Church,
     GlassWater,
     Flower2,
+    AlertCircle,
+    CheckCircle2,
+    Info,
 } from 'lucide-vue-next';
 
 const props = defineProps({
-    fechaLimite: { type: String, default: '10 de Abril de 2025' },
-    fechaEvento: { type: String, default: '2025-04-15' },
-    whatsappPapa: { type: String, default: '591XXXXXXXXX' },
-    whatsappMama: { type: String, default: '591XXXXXXXXX' },
+    fechaLimite: { type: String, default: '18 de Abril de 2026' },
+    fechaEvento: { type: String, default: '2026-04-18' },
+    // Solo los 8 dígitos bolivianos SIN el 591
+    whatsappPapa: { type: String, default: '60767398' },
+    whatsappMama: { type: String, default: '78330856' },
 });
 
 const enviado = ref(false);
@@ -566,33 +505,25 @@ const form = ref({
     asiste: null,
     adultos: 1,
     ninos: 0,
-    alergias: [],
-    transporte: false,
     mensaje: '',
 });
 
 const errores = ref({ nombre: false, telefono: false, asiste: false });
 
-const opcionesAlergias = [
-    'Vegetariano',
-    'Vegano',
-    'Sin gluten',
-    'Sin lactosa',
-    'Sin mariscos',
-    'Sin nueces',
-    'Sin huevo',
-    'Otra',
-];
-
-function toggleAlergia(a) {
-    const idx = form.value.alergias.indexOf(a);
-    if (idx === -1) form.value.alergias.push(a);
-    else form.value.alergias.splice(idx, 1);
+// ─── Teléfono Bolivia ────────────────────────────────────────────
+function onTelefonoInput() {
+    form.value.telefono = form.value.telefono.replace(/\D/g, '').slice(0, 8);
+    errores.value.telefono = false;
 }
-
-const diasRestantes = computed(() => {
-    return Math.ceil((new Date(props.fechaEvento) - new Date()) / (1000 * 60 * 60 * 24));
+const telefonoValido = computed(() => {
+    const t = form.value.telefono;
+    return t.length === 8 && (t[0] === '6' || t[0] === '7');
 });
+// ────────────────────────────────────────────────────────────────
+
+const diasRestantes = computed(() =>
+    Math.ceil((new Date(props.fechaEvento) - new Date()) / (1000 * 60 * 60 * 24))
+);
 
 function scrollAbajo() {
     cuerpoRef.value?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -604,7 +535,7 @@ function validar() {
         errores.value.nombre = true;
         ok = false;
     }
-    if (!form.value.telefono.trim()) {
+    if (!telefonoValido.value) {
         errores.value.telefono = true;
         ok = false;
     }
@@ -615,29 +546,75 @@ function validar() {
     return ok;
 }
 
+function construirMensaje() {
+    const { nombre, telefono, asiste, adultos, ninos, mensaje } = form.value;
+    const total = adultos + ninos;
+    const telFormato = `+591 ${telefono}`;
+
+    if (asiste) {
+        return (
+            `🎀 *CONFIRMACIÓN DE ASISTENCIA* 🎀\n` +
+            `✨ Bautizo de Keila Tamara ✨\n\n` +
+            `👤 *Nombre:* ${nombre}\n` +
+            `📞 *WhatsApp:* ${telFormato}\n\n` +
+            `━━━━━━━━━━━━━━━━━━\n` +
+            `👥 *Asistentes*\n` +
+            `  🧑 Adultos: ${adultos}\n` +
+            `  👶 Niños:   ${ninos}\n` +
+            `  🎊 Total:   ${total} persona${total !== 1 ? 's' : ''}\n` +
+            `━━━━━━━━━━━━━━━━━━\n` +
+            `📅 *Fecha:* Sábado 18 de Abril de 2026\n` +
+            `🕐 *Hora:* 2:45 PM (Iglesia) · ~3:30 PM (Recepción)\n` +
+            (mensaje ? `\n💬 *Mensaje:* "${mensaje}"\n` : '') +
+            `━━━━━━━━━━━━━━━━━━\n` +
+            `_Enviado desde la invitación digital_ 🌸`
+        );
+    } else {
+        return (
+            `❌ *NO PODRÁ ASISTIR*\n` +
+            `✨ Bautizo de Keila Tamara ✨\n\n` +
+            `👤 *Nombre:* ${nombre}\n` +
+            `📞 *WhatsApp:* ${telFormato}\n` +
+            (mensaje ? `\n💬 *Motivo:* "${mensaje}"\n` : '') +
+            `\n_Enviado desde la invitación digital_ 🌸`
+        );
+    }
+}
+
+// ─── FIX: abre WA con <a> programático (no bloqueado por el navegador) ───
+function abrirWA(numero, textoEncoded) {
+    // Limpia cualquier prefijo: quita el + y asegura que empiece con 591
+    const limpio = numero.replace(/\D/g, '');
+    // Si ya trae 591 al inicio (11 dígitos) lo usa tal cual, si no lo agrega
+    const numFinal = limpio.startsWith('591') ? limpio : `591${limpio}`;
+    const url = `https://wa.me/${numFinal}?text=${textoEncoded}`;
+    const a = document.createElement('a');
+    a.href = url;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
 async function enviarFormulario() {
     if (!validar()) return;
     enviando.value = true;
-    await new Promise(r => setTimeout(r, 1400));
-
-    const { nombre, telefono, asiste, adultos, ninos, alergias, transporte, mensaje } = form.value;
-    const total = adultos + ninos;
-    const alergiasStr = alergias.length ? alergias.join(', ') : 'Ninguna';
-    const transpStr = transporte ? 'Sí necesita' : 'No necesita';
-
-    const texto = asiste
-        ? `✅ *CONFIRMACIÓN DE ASISTENCIA*\n\n👤 *Nombre:* ${nombre}\n📞 *Teléfono:* ${telefono}\n\n🧑‍🤝‍🧑 *Adultos:* ${adultos}\n👶 *Niños:* ${ninos}\n🎊 *Total:* ${total} personas\n\n🍽️ *Alergias:* ${alergiasStr}\n🚗 *Transporte:* ${transpStr}${mensaje ? `\n\n💬 "${mensaje}"` : ''}`
-        : `❌ *NO PODRÁ ASISTIR*\n\n👤 *Nombre:* ${nombre}\n📞 *Teléfono:* ${telefono}${mensaje ? `\n\n💬 Motivo: "${mensaje}"` : ''}`;
-
+    const encoded = encodeURIComponent(construirMensaje());
+    await new Promise(r => setTimeout(r, 800));
     enviando.value = false;
     enviado.value = true;
-    window.open(`https://wa.me/${props.whatsappMama}?text=${encodeURIComponent(texto)}`, '_blank');
+
+    // Abre mamá inmediatamente
+    abrirWA(props.whatsappMama, encoded);
+    // Abre papá 1.2s después (para que el navegador no bloquee el segundo)
+    setTimeout(() => abrirWA(props.whatsappPapa, encoded), 1200);
 }
+// ────────────────────────────────────────────────────────────────
 
 function modificarRespuesta() {
     enviado.value = false;
 }
-
 onMounted(() => AOS.refresh());
 
 function particulaStyle(n) {
@@ -656,11 +633,13 @@ function particulaStyle(n) {
         { top: '48%', right: '1%' },
     ];
     const p = pos[(n - 1) % pos.length];
-    const delay = ((n * 0.6) % 3).toFixed(1);
-    const size = (0.6 + (n % 3) * 0.2).toFixed(2);
-    return { ...p, position: 'absolute', animationDelay: `${delay}s`, fontSize: `${size}rem` };
+    return {
+        ...p,
+        position: 'absolute',
+        animationDelay: `${((n * 0.6) % 3).toFixed(1)}s`,
+        fontSize: `${(0.6 + (n % 3) * 0.2).toFixed(2)}rem`,
+    };
 }
-
 function sparkleStyle(n) {
     const pos = [
         { top: '8%', left: '6%' },
@@ -675,13 +654,12 @@ function sparkleStyle(n) {
         { top: '48%', right: '2%' },
     ];
     const p = pos[(n - 1) % pos.length];
-    const delay = ((n * 0.45) % 2.5).toFixed(1);
     return {
         ...p,
         position: 'absolute',
         color: 'rgba(201,151,74,0.4)',
         fontSize: '.95rem',
-        animationDelay: `${delay}s`,
+        animationDelay: `${((n * 0.45) % 2.5).toFixed(1)}s`,
     };
 }
 </script>
@@ -696,28 +674,9 @@ function sparkleStyle(n) {
     margin: 0;
     padding: 0;
 }
-
-:root {
-    --rosa: #c0607a;
-    --rosa-deep: #7a2e48;
-    --rosa-pale: rgba(255, 235, 242, 0.9);
-    --verde: #3a8a5e;
-    --verde-pale: rgba(205, 242, 220, 0.92);
-    --dorado: #c9974a;
-    --texto: #3d2030;
-    --texto-soft: #8a6070;
-    --borde: rgba(192, 96, 122, 0.2);
-    --card-bg: rgba(253, 248, 245, 0.78);
-    --blur: blur(16px);
-    --shadow: 0 16px 58px rgba(140, 50, 80, 0.18);
-    --radius: 28px;
-}
-
 .rsvp-section {
     font-family: 'EB Garamond', serif;
-    color: var(--texto);
-    position: relative;
-    z-index: 1;
+    color: #3d2030;
     background: linear-gradient(180deg, #fdf0f4 0%, #fef8fb 100%);
 }
 
@@ -726,10 +685,10 @@ function sparkleStyle(n) {
     position: relative;
     width: 100%;
     height: 100svh;
+    min-height: 560px;
     max-height: 740px;
     overflow: hidden;
 }
-
 .portada-bg {
     position: absolute;
     inset: 0;
@@ -738,16 +697,14 @@ function sparkleStyle(n) {
     background-position: center 35%;
     animation: kenburns 18s ease-in-out infinite alternate;
 }
-
 @keyframes kenburns {
     from {
-        transform: scale(1) translateX(0);
+        transform: scale(1);
     }
     to {
         transform: scale(1.1) translateX(1%);
     }
 }
-
 .portada-overlay {
     position: absolute;
     inset: 0;
@@ -758,7 +715,6 @@ function sparkleStyle(n) {
         rgba(22, 5, 14, 0.88) 100%
     );
 }
-
 .particulas {
     position: absolute;
     inset: 0;
@@ -779,7 +735,6 @@ function sparkleStyle(n) {
         opacity: 0.72;
     }
 }
-
 .portada-content {
     position: absolute;
     inset: 0;
@@ -789,12 +744,21 @@ function sparkleStyle(n) {
     justify-content: center;
     text-align: center;
     padding: 2rem 1.5rem;
-    gap: 1rem;
+    gap: 0.9rem;
 }
-
-/* Sobre SVG */
 .portada-sobre-wrap {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.sobre-anillo {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.22);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -811,42 +775,52 @@ function sparkleStyle(n) {
 }
 .portada-sobre-svg {
     color: rgba(255, 200, 150, 0.92);
-    filter: drop-shadow(0 0 24px rgba(255, 180, 120, 0.55));
+    filter: drop-shadow(0 0 20px rgba(255, 180, 120, 0.5));
     position: relative;
     z-index: 1;
 }
 .sobre-glow {
     position: absolute;
-    width: 80px;
-    height: 80px;
-    background: radial-gradient(circle, rgba(255, 180, 120, 0.3), transparent 70%);
+    width: 90px;
+    height: 90px;
+    background: radial-gradient(circle, rgba(255, 180, 120, 0.25), transparent 70%);
     border-radius: 50%;
-    animation: pulso-glow 2s ease-in-out infinite;
+    animation: pulso-glow 2.2s ease-in-out infinite;
 }
 @keyframes pulso-glow {
     0%,
     100% {
         transform: scale(1);
-        opacity: 0.6;
+        opacity: 0.5;
     }
     50% {
-        transform: scale(1.4);
+        transform: scale(1.5);
         opacity: 0;
     }
 }
-
+.eyebrow-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+.eyebrow-line {
+    width: 32px;
+    height: 1px;
+    background: rgba(255, 215, 180, 0.5);
+    flex-shrink: 0;
+}
 .portada-eyebrow {
     font-family: 'EB Garamond', serif;
     font-style: italic;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     color: rgba(255, 215, 185, 0.9);
-    letter-spacing: 5px;
+    letter-spacing: 4px;
     text-transform: uppercase;
+    white-space: nowrap;
 }
-
 .portada-titulo {
     font-family: 'Cinzel', serif;
-    font-size: clamp(1.85rem, 6.5vw, 4rem);
+    font-size: clamp(1.9rem, 7vw, 4.2rem);
     font-weight: 700;
     color: #fff;
     letter-spacing: 2px;
@@ -855,61 +829,72 @@ function sparkleStyle(n) {
         0 2px 30px rgba(0, 0, 0, 0.75),
         0 0 90px rgba(215, 130, 165, 0.38);
 }
-
 .portada-sub {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     color: rgba(255, 215, 232, 0.85);
     font-style: italic;
     letter-spacing: 2px;
 }
-
 .portada-countdown {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-    background: rgba(255, 255, 255, 0.1);
+    gap: 1rem;
+    background: rgba(255, 255, 255, 0.11);
     backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    border-radius: 20px;
-    padding: 1rem 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 18px;
+    padding: 0.85rem 1.6rem;
 }
-.cd-bloque {
+.cd-bloque-num {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.1rem;
 }
 .cd-num {
     font-family: 'Cinzel', serif;
-    font-size: 2.5rem;
+    font-size: 2.4rem;
     font-weight: 700;
     color: white;
     line-height: 1;
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
 }
-.cd-texto {
-    font-family: 'Cinzel', serif;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: white;
-    letter-spacing: 1px;
-}
 .cd-label {
-    font-size: 0.58rem;
+    font-size: 0.56rem;
     text-transform: uppercase;
     letter-spacing: 2.5px;
-    color: rgba(255, 215, 190, 0.75);
+    color: rgba(255, 215, 190, 0.72);
 }
-.cd-div {
-    color: rgba(255, 215, 180, 0.4);
-    font-size: 1.8rem;
+.cd-sep {
+    width: 1px;
+    height: 42px;
+    background: rgba(255, 255, 255, 0.25);
+    flex-shrink: 0;
 }
-
+.cd-bloque-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 0.18rem;
+    text-align: left;
+}
+.cd-sublabel {
+    font-size: 0.58rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255, 215, 190, 0.7);
+}
+.cd-fecha {
+    font-family: 'Cinzel', serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: white;
+    letter-spacing: 0.8px;
+}
 .portada-cta {
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    padding: 0.9rem 2.5rem;
+    padding: 0.9rem 2.4rem;
+    margin-top: 0.2rem;
     background: linear-gradient(135deg, rgba(212, 108, 145, 0.9), rgba(148, 42, 78, 0.95));
     backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 195, 215, 0.38);
@@ -924,6 +909,8 @@ function sparkleStyle(n) {
     transition:
         transform 0.22s,
         box-shadow 0.22s;
+    min-height: 48px;
+    -webkit-tap-highlight-color: transparent;
 }
 .portada-cta:hover {
     transform: translateY(-3px);
@@ -932,7 +919,6 @@ function sparkleStyle(n) {
 .cta-arrow-svg {
     animation: bounce-y 1.7s ease-in-out infinite;
 }
-
 @keyframes bounce-y {
     0%,
     100% {
@@ -942,23 +928,44 @@ function sparkleStyle(n) {
         transform: translateY(7px);
     }
 }
-
-.scroll-mouse {
+.scroll-indicator {
     position: absolute;
-    bottom: 26px;
+    bottom: 24px;
     left: 50%;
     transform: translateX(-50%);
-    width: 28px;
-    height: 48px;
-    border: 2px solid rgba(255, 255, 255, 0.42);
-    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    opacity: 0.82;
+    animation: fade-in-scroll 1s ease 1.8s both;
+    -webkit-tap-highlight-color: transparent;
+}
+@keyframes fade-in-scroll {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(10px);
+    }
+    to {
+        opacity: 0.82;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+.scroll-track {
+    width: 26px;
+    height: 42px;
+    border: 2px solid rgba(255, 255, 255, 0.48);
+    border-radius: 13px;
     display: flex;
     justify-content: center;
-    padding-top: 7px;
+    padding-top: 6px;
+    backdrop-filter: blur(4px);
+    background: rgba(255, 255, 255, 0.08);
 }
 .scroll-dot {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
     background: white;
     border-radius: 50%;
     animation: scroll-d 2.2s ease-in-out infinite;
@@ -977,17 +984,23 @@ function sparkleStyle(n) {
         opacity: 0;
     }
 }
+.scroll-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.58);
+}
 
 /* ═══ CUERPO ═══ */
 .rsvp-body {
     max-width: 680px;
     margin: 0 auto;
-    padding: 3rem 1rem 3.5rem;
+    padding: 2.8rem 1rem 3.5rem;
     display: flex;
     flex-direction: column;
     gap: 2rem;
 }
-
 .seccion-header {
     text-align: center;
 }
@@ -996,70 +1009,68 @@ function sparkleStyle(n) {
     align-items: center;
     justify-content: center;
     gap: 0.6rem;
-    margin-bottom: 0.7rem;
+    margin-bottom: 0.65rem;
 }
 .orn-icon {
-    color: var(--dorado);
+    color: #c9974a;
     opacity: 0.7;
 }
 .orn-icon-center {
-    color: var(--dorado);
+    color: #c9974a;
 }
 .seccion-titulo {
     font-family: 'Cinzel', serif;
-    font-size: clamp(1.7rem, 4vw, 2.6rem);
+    font-size: clamp(1.65rem, 4vw, 2.5rem);
     font-weight: 700;
-    color: var(--rosa-deep);
+    color: #7a2e48;
     letter-spacing: 2px;
     text-shadow: 1px 2px 0 rgba(255, 255, 255, 0.8);
 }
 .seccion-sub {
-    font-size: 1.05rem;
-    color: var(--texto-soft);
+    font-size: 1rem;
+    color: #8a6070;
     font-style: italic;
-    margin-top: 0.4rem;
-}
-.linea-deco {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1rem;
-}
-.linea-trazo {
-    flex: 1;
-    max-width: 100px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--dorado), transparent);
+    margin-top: 0.38rem;
 }
 
-/* ═══ RSVP CARD ═══ */
+/* ═══ CARD ═══ */
 .rsvp-card {
-    background: var(--card-bg);
-    backdrop-filter: var(--blur);
-    border-radius: var(--radius);
-    border: 1px solid var(--borde);
+    background: rgba(253, 248, 245, 0.85);
+    backdrop-filter: blur(18px);
+    border-radius: 26px;
+    border: 1px solid rgba(192, 96, 122, 0.22);
     box-shadow:
-        var(--shadow),
+        0 16px 58px rgba(140, 50, 80, 0.18),
         inset 0 1px 0 rgba(255, 255, 255, 0.65);
     overflow: hidden;
     display: flex;
     flex-direction: column;
 }
-
-/* Banner fecha */
+.rsvp-card::before {
+    content: '';
+    display: block;
+    height: 2px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        #c9974a 30%,
+        #f0d880 50%,
+        #c9974a 70%,
+        transparent
+    );
+}
 .fecha-banner {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1.1rem 1.8rem;
-    background: linear-gradient(135deg, rgba(255, 248, 195, 0.95), rgba(255, 230, 160, 0.8));
+    gap: 0.9rem;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, rgba(255, 248, 195, 0.96), rgba(255, 230, 160, 0.82));
     border-bottom: 1px solid rgba(218, 185, 95, 0.42);
 }
 .fb-icon-wrap {
-    width: 44px;
-    height: 44px;
-    border-radius: 13px;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
     flex-shrink: 0;
     background: rgba(200, 168, 60, 0.16);
     display: flex;
@@ -1071,7 +1082,7 @@ function sparkleStyle(n) {
 }
 .fb-label {
     font-family: 'Cinzel', serif;
-    font-size: 0.56rem;
+    font-size: 0.54rem;
     text-transform: uppercase;
     letter-spacing: 2.5px;
     color: #9a7020;
@@ -1079,7 +1090,7 @@ function sparkleStyle(n) {
 }
 .fb-fecha {
     font-family: 'Cinzel', serif;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 700;
     color: #6a4010;
 }
@@ -1089,29 +1100,28 @@ function sparkleStyle(n) {
     flex-direction: column;
     align-items: center;
     background: rgba(255, 205, 80, 0.55);
-    border-radius: 16px;
-    padding: 0.5rem 1.2rem;
+    border-radius: 14px;
+    padding: 0.45rem 1.1rem;
     border: 1px solid rgba(210, 165, 55, 0.48);
+    flex-shrink: 0;
 }
 .fb-num {
     font-family: 'Cinzel', serif;
-    font-size: 2rem;
+    font-size: 1.9rem;
     font-weight: 700;
     color: #8a4008;
     line-height: 1;
 }
 .fb-unit {
     font-family: 'Cinzel', serif;
-    font-size: 0.54rem;
+    font-size: 0.52rem;
     text-transform: uppercase;
     letter-spacing: 2px;
     color: #9a7020;
 }
-
-/* Form bloques */
 .form-bloque {
-    padding: 1.6rem 1.8rem;
-    border-bottom: 1px solid var(--borde);
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(192, 96, 122, 0.18);
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
@@ -1119,31 +1129,35 @@ function sparkleStyle(n) {
 .form-bloque:last-of-type {
     border-bottom: none;
 }
-
 .bloque-titulo {
     display: flex;
     align-items: center;
-    gap: 0.65rem;
+    gap: 0.6rem;
 }
 .bt-numero {
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--rosa), var(--rosa-deep));
-    color: rgb(0, 0, 0);
-    font-family: 'Cinzel', serif;
-    font-size: 0.7rem;
-    font-weight: 700;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #c0607a, #7a2e48);
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(192, 96, 122, 0.3);
+    box-shadow: 0 2px 10px rgba(192, 96, 122, 0.4);
+}
+.bt-numero span {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+    display: block;
+    -webkit-font-smoothing: antialiased;
 }
 .bt-icon-wrap {
-    width: 32px;
-    height: 32px;
-    border-radius: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
     flex-shrink: 0;
     background: linear-gradient(135deg, rgba(192, 96, 122, 0.12), rgba(201, 151, 74, 0.1));
     display: flex;
@@ -1151,55 +1165,58 @@ function sparkleStyle(n) {
     justify-content: center;
 }
 .bt-svg {
-    color: var(--rosa-deep);
+    color: #7a2e48;
 }
 .bloque-titulo h4 {
     font-family: 'Cinzel', serif;
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     font-weight: 700;
-    color: var(--rosa-deep);
+    color: #7a2e48;
     letter-spacing: 1px;
 }
-
-/* Campos */
 .campo-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    gap: 0.9rem;
 }
 .campo,
 .campo.full {
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    gap: 0.38rem;
 }
 .campo label {
     font-family: 'Cinzel', serif;
-    font-size: 0.58rem;
+    font-size: 0.56rem;
     text-transform: uppercase;
     letter-spacing: 2.5px;
-    color: var(--dorado);
+    color: #c9974a;
     font-weight: 600;
     display: flex;
     align-items: center;
+    gap: 4px;
+}
+.label-icon {
+    color: #c9974a;
+    flex-shrink: 0;
 }
 .req {
-    color: var(--rosa);
+    color: #c0607a;
 }
-
 .input-wrap {
     display: flex;
     align-items: center;
-    background: rgba(255, 252, 254, 0.95);
+    background: rgba(255, 252, 254, 0.96);
     border: 1.5px solid rgba(192, 140, 160, 0.35);
     border-radius: 13px;
     overflow: hidden;
     transition:
         border-color 0.22s,
         box-shadow 0.22s;
+    min-height: 48px;
 }
 .input-wrap:focus-within {
-    border-color: var(--rosa);
+    border-color: #c0607a;
     box-shadow: 0 0 0 3px rgba(192, 96, 122, 0.12);
 }
 .input-wrap.has-error {
@@ -1207,7 +1224,7 @@ function sparkleStyle(n) {
     background: rgba(255, 232, 232, 0.88);
 }
 .input-prefix-wrap {
-    padding: 0 0.75rem;
+    padding: 0 0.7rem;
     flex-shrink: 0;
     display: flex;
     align-items: center;
@@ -1222,79 +1239,124 @@ function sparkleStyle(n) {
     outline: none;
     padding: 0.75rem 0.9rem 0.75rem 0;
     font-family: 'EB Garamond', serif;
-    font-size: 1rem;
-    color: var(--texto);
+    font-size: max(16px, 1rem);
+    color: #3d2030;
     width: 100%;
 }
+.tel-wrap {
+    border-radius: 13px;
+}
+.tel-prefix {
+    display: flex;
+    align-items: center;
+    gap: 0.38rem;
+    padding: 0 0.6rem 0 0.75rem;
+    flex-shrink: 0;
+    background: rgba(245, 235, 242, 0.8);
+    border-right: 1.5px solid rgba(192, 140, 160, 0.28);
+    min-height: 100%;
+}
+.tel-flag {
+    font-size: 1.05rem;
+    line-height: 1;
+}
+.tel-code {
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #7a2e48;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+.tel-check {
+    padding: 0 0.65rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+.tel-check-svg {
+    color: #3a8a5e;
+}
+.campo-hint {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.72rem;
+    color: #8a6070;
+    font-style: italic;
+}
+.campo-hint.valido {
+    color: #3a8a5e;
+}
+.hint-icon {
+    flex-shrink: 0;
+}
 .campo-error {
+    display: flex;
+    align-items: center;
+    gap: 4px;
     font-size: 0.72rem;
     color: #d04040;
     font-style: italic;
 }
-
+.err-icon {
+    flex-shrink: 0;
+}
 .textarea-campo {
     width: 100%;
-    background: rgba(255, 252, 254, 0.95);
+    background: rgba(255, 252, 254, 0.96);
     border: 1.5px solid rgba(192, 140, 160, 0.35);
     border-radius: 13px;
     padding: 0.8rem 1rem;
     font-family: 'EB Garamond', serif;
-    font-size: 1rem;
-    color: var(--texto);
+    font-size: max(16px, 1rem);
+    color: #3d2030;
     resize: none;
     outline: none;
+    min-height: 88px;
     transition:
         border-color 0.22s,
         box-shadow 0.22s;
 }
 .textarea-campo:focus {
-    border-color: var(--rosa);
+    border-color: #c0607a;
     box-shadow: 0 0 0 3px rgba(192, 96, 122, 0.12);
 }
-
-/* Asistencia toggle */
 .asiste-bloque {
     display: flex;
     flex-direction: column;
-    gap: 0.55rem;
+    gap: 0.5rem;
 }
 .asiste-label {
     font-family: 'Cinzel', serif;
-    font-size: 0.58rem;
+    font-size: 0.56rem;
     text-transform: uppercase;
     letter-spacing: 2.5px;
-    color: var(--dorado);
+    color: #c9974a;
     font-weight: 600;
 }
 .asiste-opciones {
     display: flex;
-    gap: 0.8rem;
+    gap: 0.75rem;
 }
-.asiste-opciones.compact {
-    gap: 0.6rem;
-}
-
 .asiste-btn {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    padding: 0.88rem 1rem;
+    gap: 0.48rem;
+    padding: 0.95rem 1rem;
     border-radius: 15px;
-    border: 1.5px solid var(--borde);
+    border: 1.5px solid rgba(192, 96, 122, 0.2);
     background: rgba(255, 252, 254, 0.9);
     font-family: 'EB Garamond', serif;
     font-size: 1rem;
-    color: var(--texto);
+    color: #3d2030;
     cursor: pointer;
-    position: relative;
     transition: all 0.22s;
-}
-.asiste-btn.small {
-    padding: 0.65rem 1rem;
-    font-size: 0.95rem;
-    flex: unset;
+    min-height: 56px;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
 }
 .asiste-btn.si.activo {
     background: linear-gradient(135deg, rgba(195, 242, 218, 0.95), rgba(160, 228, 196, 0.88));
@@ -1310,7 +1372,7 @@ function sparkleStyle(n) {
     font-weight: 600;
 }
 .asiste-btn:hover:not(.activo) {
-    background: var(--rosa-pale);
+    background: rgba(255, 235, 242, 0.9);
     border-color: rgba(192, 96, 122, 0.42);
     transform: translateY(-1px);
 }
@@ -1330,33 +1392,31 @@ function sparkleStyle(n) {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--verde);
+    color: #3a8a5e;
     flex-shrink: 0;
 }
 .ab-check.no-check {
-    color: var(--rosa);
+    color: #c0607a;
 }
-
-/* Contadores */
 .contadores-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    gap: 0.9rem;
 }
 .contador-card {
-    background: rgba(255, 252, 254, 0.95);
+    background: rgba(255, 252, 254, 0.96);
     border-radius: 18px;
-    border: 1.5px solid var(--borde);
-    padding: 1.1rem 1rem;
+    border: 1.5px solid rgba(192, 96, 122, 0.2);
+    padding: 1.1rem 0.95rem;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.9rem;
     transition:
         box-shadow 0.22s,
         transform 0.22s;
 }
 .contador-card:hover {
-    box-shadow: 0 5px 20px rgba(192, 96, 122, 0.15);
+    box-shadow: 0 5px 20px rgba(192, 96, 122, 0.14);
     transform: translateY(-1px);
 }
 .contador-card.adultos {
@@ -1365,16 +1425,15 @@ function sparkleStyle(n) {
 .contador-card.ninos {
     border-color: rgba(90, 175, 135, 0.42);
 }
-
 .cnt-top {
     display: flex;
     align-items: center;
-    gap: 0.65rem;
+    gap: 0.6rem;
 }
 .cnt-icon-wrap {
-    width: 40px;
-    height: 40px;
-    border-radius: 13px;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
@@ -1387,47 +1446,46 @@ function sparkleStyle(n) {
     background: rgba(90, 175, 135, 0.14);
 }
 .cnt-svg {
-    color: var(--rosa-deep);
+    color: #7a2e48;
 }
-
 .cnt-titulo {
     font-family: 'Cinzel', serif;
-    font-size: 0.85rem;
-    color: var(--texto);
+    font-size: 0.82rem;
+    color: #3d2030;
     font-weight: 700;
 }
 .cnt-sub {
-    font-size: 0.66rem;
-    color: var(--texto-soft);
+    font-size: 0.64rem;
+    color: #8a6070;
     font-style: italic;
     margin-top: 1px;
 }
-
 .cnt-stepper {
     display: flex;
     align-items: center;
     justify-content: space-between;
     background: rgba(255, 255, 255, 0.8);
     border-radius: 50px;
-    padding: 0.32rem;
+    padding: 0.3rem;
     border: 1px solid rgba(200, 165, 180, 0.32);
 }
 .step-btn {
-    width: 38px;
-    height: 38px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition:
-        transform 0.15s,
-        box-shadow 0.15s;
+    transition: transform 0.15s;
+    min-width: 44px;
+    min-height: 44px;
+    -webkit-tap-highlight-color: transparent;
 }
 .step-btn.minus {
     background: rgba(215, 152, 175, 0.28);
-    color: var(--rosa);
+    color: #c0607a;
 }
 .step-btn.plus {
     background: linear-gradient(135deg, #e8899a, #c05575);
@@ -1435,51 +1493,48 @@ function sparkleStyle(n) {
     box-shadow: 0 3px 10px rgba(192, 85, 117, 0.35);
 }
 .step-btn:hover:not(:disabled) {
-    transform: scale(1.14);
+    transform: scale(1.12);
 }
 .step-btn:active:not(:disabled) {
-    transform: scale(0.95);
+    transform: scale(0.92);
 }
 .step-btn:disabled {
     opacity: 0.28;
     cursor: not-allowed;
     transform: none;
 }
-
 .step-display {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 54px;
+    min-width: 50px;
 }
 .step-num {
     font-family: 'Cinzel', serif;
-    font-size: 1.9rem;
+    font-size: 1.85rem;
     font-weight: 700;
-    color: var(--rosa);
+    color: #c0607a;
     line-height: 1;
 }
 .step-unit {
-    font-size: 0.6rem;
-    color: var(--texto-soft);
+    font-size: 0.58rem;
+    color: #8a6070;
     font-style: italic;
     margin-top: 1px;
 }
-
-/* Resumen total */
 .resumen-total {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.6rem;
+    gap: 0.55rem;
     flex-wrap: wrap;
 }
 .rt-pill {
     display: flex;
     align-items: center;
-    gap: 0.42rem;
+    gap: 0.4rem;
     border-radius: 50px;
-    padding: 0.52rem 1rem;
+    padding: 0.48rem 0.9rem;
     border: 1px solid transparent;
 }
 .adultos-pill {
@@ -1501,114 +1556,91 @@ function sparkleStyle(n) {
 }
 .rt-label {
     font-family: 'Cinzel', serif;
-    font-size: 0.58rem;
+    font-size: 0.56rem;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: var(--texto-soft);
+    color: #8a6070;
 }
 .rt-num {
     font-family: 'Cinzel', serif;
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    color: var(--texto);
+    color: #3d2030;
 }
 .rt-num.grande {
-    font-size: 1.5rem;
-    color: var(--rosa);
+    font-size: 1.45rem;
+    color: #c0607a;
 }
 .rt-op {
     font-family: 'Cinzel', serif;
     font-size: 1.3rem;
     font-weight: 700;
-    color: var(--texto-soft);
+    color: #8a6070;
 }
-
-/* Chips */
-.chips-wrap {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 0.2rem;
-}
-.chip {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    padding: 0.38rem 0.9rem;
-    border-radius: 50px;
-    border: 1.5px solid rgba(192, 140, 165, 0.36);
-    background: rgba(255, 252, 254, 0.92);
-    font-family: 'EB Garamond', serif;
-    font-size: 0.9rem;
-    color: var(--texto);
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.chip.activo {
-    background: var(--verde-pale);
-    border-color: rgba(70, 155, 110, 0.62);
-    color: #155e38;
-    font-weight: 600;
-}
-.chip:hover:not(.activo) {
-    border-color: var(--rosa);
-    background: var(--rosa-pale);
-    transform: translateY(-1px);
-}
-.chip-check-svg {
-    color: var(--verde);
-    flex-shrink: 0;
-}
-
-/* Pre-envío */
 .pre-envio {
     display: flex;
-    align-items: center;
-    gap: 0.65rem;
-    background: rgba(255, 248, 195, 0.88);
+    align-items: flex-start;
+    gap: 0.6rem;
+    background: rgba(255, 248, 195, 0.9);
     border: 1px solid rgba(218, 185, 95, 0.45);
     border-radius: 12px;
-    padding: 0.7rem 1rem;
+    padding: 0.7rem 0.95rem;
     width: 100%;
 }
 .pe-svg {
     color: #9a7020;
     flex-shrink: 0;
+    margin-top: 2px;
 }
 .pe-texto {
     font-size: 0.88rem;
     color: #7a5010;
     font-style: italic;
-    line-height: 1.4;
+    line-height: 1.45;
 }
 .pe-texto strong {
     color: #5a3808;
     font-style: normal;
 }
-
-/* Form acciones */
+.wa-destino-aviso {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(220, 245, 230, 0.88);
+    border: 1px solid rgba(70, 155, 110, 0.35);
+    border-radius: 10px;
+    padding: 0.55rem 0.9rem;
+    width: 100%;
+}
+.wa-aviso-icon {
+    color: #25a244;
+    flex-shrink: 0;
+}
+.wa-destino-aviso span {
+    font-size: 0.82rem;
+    color: #1a5e2a;
+    font-style: italic;
+}
 .form-acciones {
-    padding: 1.5rem 1.8rem;
+    padding: 1.4rem 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 0.7rem;
+    gap: 0.65rem;
     align-items: center;
 }
-
-/* Botón enviar */
 .btn-enviar {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.7rem;
-    padding: 1.15rem 2rem;
+    padding: 1.1rem 1.8rem;
     background: linear-gradient(135deg, #3d1a28 0%, #6e2a45 50%, #9a3d58 100%);
     color: white;
     border: none;
-    border-radius: 18px;
+    border-radius: 17px;
     font-family: 'Cinzel', serif;
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     font-weight: 600;
     letter-spacing: 2.5px;
     cursor: pointer;
@@ -1620,6 +1652,8 @@ function sparkleStyle(n) {
     transition:
         transform 0.22s,
         box-shadow 0.22s;
+    min-height: 54px;
+    -webkit-tap-highlight-color: transparent;
 }
 .btn-enviar::after {
     content: '';
@@ -1645,7 +1679,7 @@ function sparkleStyle(n) {
     box-shadow: 0 12px 40px rgba(80, 20, 45, 0.58);
 }
 .btn-enviar:active:not(:disabled) {
-    transform: translateY(0) scale(0.98);
+    transform: scale(0.98);
 }
 .btn-enviar.cargando {
     opacity: 0.72;
@@ -1657,6 +1691,7 @@ function sparkleStyle(n) {
 .be-flecha {
     margin-left: auto;
     transition: transform 0.28s;
+    flex-shrink: 0;
 }
 .btn-enviar:hover .be-flecha {
     transform: translateX(5px);
@@ -1671,13 +1706,19 @@ function sparkleStyle(n) {
 }
 .form-nota {
     font-family: 'EB Garamond', serif;
-    font-size: 0.78rem;
-    color: var(--texto-soft);
+    font-size: 0.76rem;
+    color: #8a6070;
     font-style: italic;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
 }
-
-/* Transición expand */
+.lock-icon {
+    flex-shrink: 0;
+    opacity: 0.55;
+}
 .expand-enter-active {
     transition: all 0.38s ease;
     overflow: hidden;
@@ -1695,23 +1736,23 @@ function sparkleStyle(n) {
 .expand-enter-to,
 .expand-leave-from {
     opacity: 1;
-    max-height: 900px;
+    max-height: 800px;
 }
 
 /* ═══ ÉXITO ═══ */
 .exito-card {
-    background: var(--card-bg);
-    backdrop-filter: var(--blur);
-    border-radius: var(--radius);
-    border: 1px solid var(--borde);
+    background: rgba(253, 248, 245, 0.85);
+    backdrop-filter: blur(18px);
+    border-radius: 26px;
+    border: 1px solid rgba(192, 96, 122, 0.22);
     box-shadow:
-        var(--shadow),
+        0 16px 58px rgba(140, 50, 80, 0.18),
         inset 0 1px 0 rgba(255, 255, 255, 0.65);
-    padding: 3rem 2rem;
+    padding: 2.8rem 1.8rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.4rem;
+    gap: 1.3rem;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -1720,14 +1761,13 @@ function sparkleStyle(n) {
 @keyframes zoomIn {
     from {
         opacity: 0;
-        transform: scale(0.82);
+        transform: scale(0.84);
     }
     to {
         opacity: 1;
         transform: scale(1);
     }
 }
-
 .exito-sparkles {
     position: absolute;
     inset: 0;
@@ -1736,7 +1776,6 @@ function sparkleStyle(n) {
 .sparkle {
     animation: flotar-p 3s ease-in-out infinite alternate;
 }
-
 .exito-icono-wrap {
     position: relative;
     display: flex;
@@ -1745,7 +1784,7 @@ function sparkleStyle(n) {
     z-index: 1;
 }
 .exito-icono-svg {
-    color: var(--rosa);
+    color: #c0607a;
     filter: drop-shadow(0 0 20px rgba(192, 96, 122, 0.4));
     animation: latir 1.3s ease-in-out infinite;
     position: relative;
@@ -1760,20 +1799,19 @@ function sparkleStyle(n) {
         transform: scale(1.18);
     }
 }
-
 .exito-ring {
     position: absolute;
     border-radius: 50%;
     animation: exito-pulse 2s ease-out infinite;
 }
 .exito-ring.r1 {
-    width: 100px;
-    height: 100px;
+    width: 96px;
+    height: 96px;
     border: 2px solid rgba(192, 96, 122, 0.5);
 }
 .exito-ring.r2 {
-    width: 128px;
-    height: 128px;
+    width: 124px;
+    height: 124px;
     border: 1.5px solid rgba(192, 96, 122, 0.25);
     animation-delay: 0.8s;
 }
@@ -1787,27 +1825,25 @@ function sparkleStyle(n) {
         opacity: 0;
     }
 }
-
 .exito-titulo {
     font-family: 'Cinzel', serif;
-    font-size: clamp(1.4rem, 4vw, 2rem);
+    font-size: clamp(1.35rem, 4vw, 2rem);
     font-weight: 700;
-    color: var(--rosa-deep);
+    color: #7a2e48;
     letter-spacing: 1px;
     position: relative;
     z-index: 1;
 }
 .exito-sub {
-    font-size: 1.05rem;
-    color: var(--texto-soft);
+    font-size: 1.02rem;
+    color: #8a6070;
     font-style: italic;
     position: relative;
     z-index: 1;
 }
-
 .exito-resumen {
     display: flex;
-    gap: 0.8rem;
+    gap: 0.75rem;
     justify-content: center;
     flex-wrap: wrap;
     width: 100%;
@@ -1818,11 +1854,11 @@ function sparkleStyle(n) {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.35rem;
+    gap: 0.32rem;
     border-radius: 18px;
-    padding: 1rem 1.3rem;
+    padding: 0.95rem 1.2rem;
     border: 1px solid transparent;
-    min-width: 90px;
+    min-width: 86px;
 }
 .adultos-card {
     background: rgba(235, 225, 255, 0.92);
@@ -1833,7 +1869,7 @@ function sparkleStyle(n) {
     border-color: rgba(90, 175, 135, 0.35);
 }
 .total-card {
-    background: var(--rosa-pale);
+    background: rgba(255, 235, 242, 0.9);
     border-color: rgba(192, 96, 122, 0.3);
     box-shadow: 0 3px 14px rgba(192, 96, 122, 0.14);
 }
@@ -1847,72 +1883,116 @@ function sparkleStyle(n) {
     color: #3a8a5e;
 }
 .total-svg {
-    color: var(--rosa);
+    color: #c0607a;
 }
 .er-label {
     font-family: 'Cinzel', serif;
-    font-size: 0.56rem;
+    font-size: 0.54rem;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: var(--texto-soft);
+    color: #8a6070;
 }
 .er-num {
     font-family: 'Cinzel', serif;
-    font-size: 1.8rem;
+    font-size: 1.75rem;
     font-weight: 700;
-    color: var(--rosa-deep);
+    color: #7a2e48;
     line-height: 1;
 }
 .er-num.grande {
-    font-size: 2.4rem;
-    color: var(--rosa);
+    font-size: 2.3rem;
+    color: #c0607a;
 }
-
 .exito-detalles {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.48rem;
     width: 100%;
     max-width: 340px;
     background: rgba(255, 252, 254, 0.9);
     border-radius: 16px;
-    padding: 1.1rem 1.3rem;
-    border: 1px solid var(--borde);
+    padding: 1.05rem 1.2rem;
+    border: 1px solid rgba(192, 96, 122, 0.2);
     position: relative;
     z-index: 1;
 }
 .ed-item {
     display: flex;
     align-items: center;
-    gap: 0.65rem;
+    gap: 0.6rem;
     font-size: 0.9rem;
-    color: var(--texto);
+    color: #3d2030;
 }
 .ed-svg {
-    color: var(--dorado);
+    color: #c9974a;
     flex-shrink: 0;
 }
-
+.exito-tel-confirmado {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(240, 235, 255, 0.88);
+    border: 1px solid rgba(150, 120, 198, 0.35);
+    border-radius: 10px;
+    padding: 0.55rem 1rem;
+    position: relative;
+    z-index: 1;
+}
+.exito-tel-icon {
+    color: #7050c8;
+    flex-shrink: 0;
+}
+.exito-tel-confirmado span {
+    font-size: 0.88rem;
+    color: #3d2030;
+    font-style: italic;
+}
+.exito-tel-confirmado strong {
+    color: #7a2e48;
+    font-style: normal;
+}
+.exito-wa-aviso {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(220, 245, 230, 0.9);
+    border: 1px solid rgba(70, 155, 110, 0.38);
+    border-radius: 12px;
+    padding: 0.65rem 1rem;
+    position: relative;
+    z-index: 1;
+}
+.exito-wa-icon {
+    color: #25a244;
+    flex-shrink: 0;
+}
+.exito-wa-aviso span {
+    font-size: 0.84rem;
+    color: #1a5e2a;
+    font-style: italic;
+}
 .btn-modificar {
     display: flex;
     align-items: center;
     background: transparent;
     border: 1.5px solid rgba(192, 96, 122, 0.42);
-    color: var(--rosa);
-    padding: 0.68rem 1.7rem;
+    color: #c0607a;
+    padding: 0.7rem 1.7rem;
     border-radius: 50px;
     font-family: 'Cinzel', serif;
-    font-size: 0.75rem;
+    font-size: 0.74rem;
     font-weight: 600;
     letter-spacing: 1px;
     cursor: pointer;
     transition: all 0.22s;
     position: relative;
     z-index: 1;
+    min-height: 44px;
+    -webkit-tap-highlight-color: transparent;
 }
 .btn-modificar:hover {
-    background: var(--rosa-pale);
-    border-color: var(--rosa);
+    background: rgba(255, 235, 242, 0.9);
+    border-color: #c0607a;
     transform: translateY(-1px);
 }
 
@@ -1924,23 +2004,23 @@ function sparkleStyle(n) {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
-    margin-bottom: 0.7rem;
+    gap: 0.9rem;
+    margin-bottom: 0.65rem;
 }
 .pl-trazo {
     flex: 1;
     max-width: 80px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--dorado), transparent);
+    background: linear-gradient(90deg, transparent, #c9974a, transparent);
 }
 .pie-flor-svg {
-    color: var(--dorado);
+    color: #c9974a;
 }
 .pie-cita {
     font-family: 'Cinzel', serif;
-    font-size: 0.88rem;
+    font-size: 0.86rem;
     font-style: italic;
-    color: var(--rosa-deep);
+    color: #7a2e48;
     letter-spacing: 1px;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
 }
@@ -1950,38 +2030,99 @@ function sparkleStyle(n) {
     .portada-hero {
         max-height: 660px;
     }
+    .portada-content {
+        gap: 0.72rem;
+        padding: 1.5rem 1rem;
+    }
     .portada-countdown {
         flex-direction: column;
-        gap: 0.4rem;
+        gap: 0.5rem;
+        padding: 0.75rem 1.3rem;
     }
-    .cd-div {
-        display: none;
+    .cd-sep {
+        width: 60px;
+        height: 1px;
+    }
+    .cd-bloque-texto {
+        text-align: center;
+    }
+    .rsvp-body {
+        padding: 2rem 0.75rem 3rem;
+    }
+    .form-bloque {
+        padding: 1.25rem 1.1rem;
+    }
+    .form-acciones {
+        padding: 1.25rem 1.1rem;
+    }
+    .fecha-banner {
+        padding: 0.9rem 1.1rem;
     }
     .campo-grid {
         grid-template-columns: 1fr;
+        gap: 0.75rem;
     }
     .contadores-grid {
         grid-template-columns: 1fr;
+        gap: 0.75rem;
     }
     .asiste-opciones {
         flex-direction: column;
     }
+    .asiste-btn {
+        min-height: 54px;
+    }
     .resumen-total {
-        gap: 0.4rem;
+        gap: 0.38rem;
+    }
+    .rt-pill {
+        padding: 0.4rem 0.75rem;
+    }
+    .exito-card {
+        padding: 2.2rem 1.2rem;
     }
     .exito-resumen {
         flex-direction: column;
         align-items: center;
     }
-    .form-bloque {
-        padding: 1.3rem 1.2rem;
-    }
-    .form-acciones {
-        padding: 1.3rem 1.2rem;
-    }
     .btn-enviar {
         font-size: 0.82rem;
         letter-spacing: 1.5px;
+    }
+    .tel-code {
+        font-size: 0.72rem;
+    }
+}
+@media (max-width: 360px) {
+    .portada-titulo {
+        font-size: 1.85rem;
+    }
+    .cd-num {
+        font-size: 2rem;
+    }
+    .seccion-titulo {
+        font-size: 1.55rem;
+    }
+    .step-num {
+        font-size: 1.65rem;
+    }
+    .er-num {
+        font-size: 1.55rem;
+    }
+    .er-num.grande {
+        font-size: 2rem;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .portada-bg,
+    .sobre-anillo,
+    .cta-arrow-svg,
+    .scroll-dot,
+    .exito-icono-svg,
+    .btn-enviar::after,
+    .particula,
+    .sparkle {
+        animation: none !important;
     }
 }
 </style>
