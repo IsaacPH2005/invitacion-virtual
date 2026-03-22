@@ -92,7 +92,7 @@ function scrollARSVP() {
 
 // ── Música ───────────────────────────────────────────
 const isPlaying = ref(false);
-const volumen = ref(0.1);
+const volumen = ref(0.6);
 let sound = null;
 
 onMounted(() => {

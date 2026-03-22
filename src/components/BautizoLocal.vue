@@ -146,6 +146,21 @@
                 </a>
             </div>
 
+            <!-- GALERÍA DE FOTOS -->
+            <div class="galeria-card" data-aos="fade-up" data-aos-delay="160">
+                <h3 class="galeria-titulo">Conoce el Salón</h3>
+                <div class="galeria-grid">
+                    <img
+                        v-for="n in 6"
+                        :key="n"
+                        :src="`/local/local${n}.jpeg`"
+                        :alt="`Foto del local ${n}`"
+                        class="galeria-img"
+                        loading="lazy"
+                    />
+                </div>
+            </div>
+
             <!-- CITA -->
             <div class="cita-bloque" data-aos="fade-up">
                 <div class="cita-linea"></div>
@@ -181,15 +196,23 @@ import {
 } from 'lucide-vue-next';
 
 const props = defineProps({
-    nombreSalon: { type: String, default: 'Salón de Eventos Las Magnolias' },
-    direccionSalon: { type: String, default: 'Av. América E-0542, Cochabamba, Bolivia' },
+    nombreSalon: { type: String, default: 'RYN' },
+    direccionSalon: { type: String, default: 'Vicente Rojo y Arturo Daza (Zona Temporal)' },
     horaInicio: { type: String, default: '~3:30 PM' },
     horaFin: { type: String, default: '~7:00 PM' },
-    latitud: { type: Number, default: -17.3895 },
-    longitud: { type: Number, default: -66.1568 },
+    latitud: { type: Number, default: -17.356681 },
+    longitud: { type: Number, default: -66.161519 },
     portadaUrl: {
         type: String,
-        default: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1200&q=90',
+        default: '/local/local5.jpeg',
+    },
+    googleMapsLink: {
+        type: String,
+        default: 'https://maps.app.goo.gl/Eb9UELAiLxqYKLMg7',
+    },
+    googleMapsEmbedUrl: {
+        type: String,
+        default: 'https://maps.google.com/maps?q=-17.356681,-66.161519&z=18&output=embed&hl=es',
     },
 });
 
@@ -200,12 +223,8 @@ function scrollAbajo() {
 onMounted(() => AOS.refresh());
 
 const lugarCorto = computed(() => props.nombreSalon.split(' ').slice(0, 3).join(' '));
-const googleMapsUrl = computed(
-    () => `https://www.google.com/maps/search/?api=1&query=${props.latitud},${props.longitud}`
-);
-const googleMapsEmbed = computed(
-    () => `https://maps.google.com/maps?q=${props.latitud},${props.longitud}&z=16&output=embed`
-);
+const googleMapsUrl = computed(() => props.googleMapsLink);
+const googleMapsEmbed = computed(() => props.googleMapsEmbedUrl);
 
 const datosSalon = computed(() => [
     { iconComp: Clock, label: 'Hora', valor: `${props.horaInicio} – ${props.horaFin}` },
@@ -874,6 +893,47 @@ function particulaStyle(n) {
     transform: translateY(-1px);
 }
 
+/* ═══ GALERÍA ═══ */
+.galeria-card {
+    background: rgba(253, 248, 245, 0.82);
+    backdrop-filter: blur(18px);
+    border-radius: 26px;
+    border: 1px solid rgba(192, 96, 122, 0.22);
+    box-shadow:
+        0 16px 60px rgba(140, 50, 80, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.65);
+    overflow: hidden;
+    padding: 1.8rem 1.5rem;
+    text-align: center;
+}
+.galeria-titulo {
+    font-family: 'Cinzel', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #7a2e48;
+    margin-bottom: 1.2rem;
+    letter-spacing: 1px;
+}
+.galeria-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.8rem;
+}
+.galeria-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(140, 50, 80, 0.1);
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+.galeria-img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 24px rgba(140, 50, 80, 0.2);
+}
+
 /* ═══ CITA ═══ */
 .cita-bloque {
     display: flex;
@@ -950,6 +1010,16 @@ function particulaStyle(n) {
     }
     .mapa-btn-full {
         margin: 0.85rem 0.9rem;
+    }
+    .galeria-card {
+        padding: 1.5rem 1rem;
+    }
+    .galeria-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.6rem;
+    }
+    .galeria-img {
+        height: 130px;
     }
     .cita-bloque {
         flex-direction: column;
